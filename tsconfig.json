@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+      "baseUrl": ".",
+      "paths": { "*": ["types/*"] },
+    "module": "commonjs",
+    "target": "es6",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "./dist/js",
+    "declarationDir": "./dist/typings",
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "declaration": true
+  },
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "typeRoots": [
+    "node_modules/@types"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
