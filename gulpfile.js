@@ -39,7 +39,7 @@ gulp.task('deploy', async () => {
 
     await deployCommands.build();
 
-    await fsUtil.createFolders();
+    await fsUtil.createFoldersForProd();
 
     await fsUtil.generatePackage();
 
