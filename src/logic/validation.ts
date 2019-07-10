@@ -21,7 +21,9 @@ export function AreResultsMatching(
     if (internalName !== jsonResult.MapName)
         return false;
 
-    if (Math.floor(relicChunkyResult.duration) !== jsonResult.Duration)
+    // not sure about this; some games durations are rounded, others floored
+    if (Math.round(relicChunkyResult.duration) !== jsonResult.Duration
+        && Math.floor(relicChunkyResult.duration) !== jsonResult.Duration)
         return false;
 
     return true;
