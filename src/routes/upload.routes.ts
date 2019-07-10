@@ -9,7 +9,7 @@ import { Queuing } from 'node-message-broker';
 
 import { unzip, UnzipResult } from './../logic/unzipping';
 import { readResult, fileHash, streamHash } from './../logic/file.system';
-import { RelicChunkyParser } from 'relic-chunky-parser';
+import { RelicChunkyParser, Types as RelicChunkyTypes } from 'relic-chunky-parser';
 
 import { AreResultsMatching } from './../logic/validation';
 import { setPlayersStats } from './../logic/ladder.logic';
@@ -41,7 +41,6 @@ export function mapUploadRoutes(app: Express) {
                         res.terminate(409, `Folder ${tempFolder} already exists`);
                         return;
                     }
-                        
 
                     await fs.mkdir(tempFolderPath);
                     let tempFilePath = `${tempFolderPath}/${fileName}`;
@@ -99,16 +98,13 @@ export function mapUploadRoutes(app: Express) {
                                 return;
                             } gameResult = <GameResult>gameResult;
 
-                            let parsedResult;
+                            let parsedResult: RelicChunkyTypes.MapData;
                             try {
-                                parsedResult= await RelicChunkyParser.getReplayData(`${gameFolderPath}/${recFile}`);
+                                parsedResult = await RelicChunkyParser.getReplayData(`${gameFolderPath}/${recFile}`);
                             }
                             catch (err) {
                                 throw err;
                             }
-
-                            //console.log(gameResult);
-                            //console.log(parsedResult);
 
                             let isMatching = AreResultsMatching(gameResult, parsedResult);
                             if (!isMatching) {
@@ -140,7 +136,8 @@ export function mapUploadRoutes(app: Express) {
                                 MapName: game.Result.MapName,
                                 Duration: game.Result.Duration,
                                 Version: game.Version,
-                                Players: playersStats
+                                Players: playersStats,
+                                ModName: parsedResult.modName
                             });
 
                             await fs.remove(tempFolderPath);
