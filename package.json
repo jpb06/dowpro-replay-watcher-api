@@ -7,23 +7,23 @@
     "name": "jpb06"
   },
   "devDependencies": {
-    "@types/amqplib": "^0.5.12",
+    "@types/amqplib": "^0.5.13",
     "@types/connect-busboy": "0.0.1",
     "@types/cors": "^2.8.5",
     "@types/debug": "^4.1.4",
     "@types/express": "^4.17.0",
     "@types/fs-extra": "^7.0.0",
     "@types/jsonwebtoken": "^8.3.2",
-    "@types/node": "^8.0.14",
+    "@types/node": "^8.10.50",
     "@types/node-ipc": "^9.1.1",
-    "@types/uuid": "^3.4.4",
+    "@types/uuid": "^3.4.5",
     "@types/yauzl": "^2.9.1",
     "archiver": "^3.0.0",
     "gulp": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-ssh": "^0.7.0",
     "gulp-typescript": "^5.0.1",
-    "typescript": "^3.5.1"
+    "typescript": "^3.5.3"
   },
   "dependencies": {
     "amqplib": "^0.5.3",
@@ -32,7 +32,7 @@
     "debug": "^4.1.1",
     "dowpro-replay-watcher-dal": "^0.2.4",
     "express": "^4.17.1",
-    "fs-extra": "^8.0.1",
+    "fs-extra": "^8.1.0",
     "jsonwebtoken": "^8.5.1",
     "node-message-broker": "0.0.5",
     "relic-chunky-parser": "0.0.7",
