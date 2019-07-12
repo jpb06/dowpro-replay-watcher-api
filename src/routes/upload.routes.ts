@@ -119,10 +119,9 @@ export function mapUploadRoutes(app: Express) {
                                 return;
                             }
 
-                            let game = {
+                            let game: Dal.Types.Game = {
                                 Hash: hash,
                                 Result: gameResult,
-                                Version: '',
                                 PostedToDiscord: false
                             };
 
@@ -135,9 +134,9 @@ export function mapUploadRoutes(app: Express) {
                                 Hash: game.Hash,
                                 MapName: game.Result.MapName,
                                 Duration: game.Result.Duration,
-                                Version: game.Version,
                                 Players: playersStats,
-                                ModName: parsedResult.modName
+                                ModName: parsedResult.modName,
+                                ModVersion: gameResult.ModVersion
                             });
 
                             await fs.remove(tempFolderPath);
