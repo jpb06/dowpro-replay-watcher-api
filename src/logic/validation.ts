@@ -6,6 +6,9 @@ export function AreResultsMatching(
     relicChunkyResult: MapData
 ): boolean {
 
+    if (jsonResult.ModName !== relicChunkyResult.modName)
+        return false;
+
     let relicChunkyPlayers = relicChunkyResult.players.filter(el => el.race.length !== 0);
 
     if (jsonResult.PlayersCount !== relicChunkyPlayers.length)
