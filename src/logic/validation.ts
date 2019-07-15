@@ -21,13 +21,15 @@ export function AreResultsMatching(
     }
 
     let internalName = relicChunkyResult.internalName.substr(relicChunkyResult.internalName.lastIndexOf('\\') + 1);
-    if (internalName !== jsonResult.MapName)
+    if (internalName.toLowerCase() !== jsonResult.MapName)
         return false;
 
-    // not sure about this; some games durations are rounded, others floored
-    if (Math.round(relicChunkyResult.duration) !== jsonResult.Duration
-        && Math.floor(relicChunkyResult.duration) !== jsonResult.Duration)
-        return false;
+    // This is not reliable
+    //console.log('duration in game file', relicChunkyResult.duration);
+    //console.log('duration in result json', jsonResult.Duration);
+    //if (Math.round(relicChunkyResult.duration) !== jsonResult.Duration
+    //    && Math.floor(relicChunkyResult.duration) !== jsonResult.Duration)
+    //    return false;
 
     return true;
 }
