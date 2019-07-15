@@ -36,7 +36,7 @@
     "jsonwebtoken": "^8.5.1",
     "node-message-broker": "0.0.5",
     "relic-chunky-parser": "0.0.7",
-    "rsa-vault": "0.0.7",
+    "rsa-vault": "0.0.8",
     "uuid": "^3.3.2",
     "yauzl": "^2.10.0"
   }
