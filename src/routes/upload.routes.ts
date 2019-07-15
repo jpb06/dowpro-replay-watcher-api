@@ -97,6 +97,7 @@ export function mapUploadRoutes(app: Express) {
                                 res.terminate(400, `Unable to parse game result for ${gameFolderPath}`);
                                 return;
                             } gameResult = <GameResult>gameResult;
+                            gameResult.MapName = gameResult.MapName.toLowerCase();
 
                             let parsedResult: RelicChunkyTypes.MapData;
                             try {
