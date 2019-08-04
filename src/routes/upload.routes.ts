@@ -4,18 +4,11 @@ import { apiConfig } from './../config/api.config.interface';
 
 import * as fs from 'fs-extra';
 import * as uuidv1 from 'uuid/v1';
-import * as Dal from 'dowpro-replay-watcher-dal';
 import { Queuing } from 'node-message-broker';
+import * as Dal from 'dowpro-replay-watcher-dal';
 
-import { unzip, UnzipResult } from './../logic/unzipping';
-import { readResult, fileHash, streamHash } from './../logic/file.system';
-import { RelicChunkyParser, Types as RelicChunkyTypes } from 'relic-chunky-parser';
-
-import { AreResultsMatching } from './../logic/validation';
-import { setPlayersStats } from './../logic/ladder.logic';
 
 import { isAuthenticated } from './../middleware/permissions.validation.middleware';
-import { GameResult } from "dowpro-replay-watcher-dal/typings/exports/types.export";
 
 export function mapUploadRoutes(app: Express) {
 
@@ -52,97 +45,26 @@ export function mapUploadRoutes(app: Express) {
                     writeStream.on('finish', async () => {
                         console.log('Upload complete');
 
-                        let extraction: UnzipResult = await unzip(tempFilePath, tempFolderPath);
+                        var result = await Dal.Business.ReadGameResultArchive(tempFolder, tempFilePath, tempFolderPath, apiConfig().gamesFilesRepositoryPath);
 
-                        if (!extraction.result) {
-                            res.terminate(400, `Unable to unzip ${tempFolder}`);
-                            return;
-                        }
-
-                        let recFile = await Dal.Util.FileSystem.findRecFile(tempFolderPath);
-                        if (recFile === undefined) {
-                            res.terminate(400, `Unable to locate replay file for ${tempFolder}`);
-                            return;
-                        }
-
-                        let hash = await fileHash(`${tempFolderPath}/${recFile}`);
-                        if (hash === undefined) {
-                            res.terminate(500, `Unable to compute file hash for ${tempFolder}`);
-                            return;
-                        } hash = <string>hash;
-
-                        let exists = await Dal.Manipulation.GamesStore.getByHash(hash);
-                        if (exists) {
-                            await fs.remove(tempFolderPath);
-                            res.terminate(400, `${hash}:${tempFolder} Already exists in db store`);
-                            return;
-                        }
-                        else {
-                            let gameFolderPath = `${apiConfig().gamesFilesRepositoryPath}/${hash}`;
-
-                            let folderAlreadyExists = await fs.pathExists(gameFolderPath);
-                            if (folderAlreadyExists) {
-                                console.log(`Folder ${hash} already exists... Cleaning and copying uploaded files`);
-                                await fs.remove(gameFolderPath);
-                            }
-                            await fs.mkdir(gameFolderPath);
-
-                            await fs.move(`${tempFolderPath}/${recFile}`, `${gameFolderPath}/${recFile}`);
-                            await fs.move(`${tempFolderPath}/result.json`, `${gameFolderPath}/result.json`);
-
-                            let gameResult = await readResult(`${gameFolderPath}/result.json`);
-
-                            if (gameResult === undefined) {
-                                await fs.remove(gameFolderPath);
-                                res.terminate(400, `Unable to parse game result for ${gameFolderPath}`);
-                                return;
-                            } gameResult = <GameResult>gameResult;
-                            gameResult.MapName = gameResult.MapName.toLowerCase();
-
-                            let parsedResult: RelicChunkyTypes.MapData;
-                            try {
-                                parsedResult = await RelicChunkyParser.getReplayData(`${gameFolderPath}/${recFile}`);
-                            }
-                            catch (err) {
-                                throw err;
-                            }
-
-                            let isMatching = AreResultsMatching(gameResult, parsedResult);
-                            if (!isMatching) {
-                                await fs.remove(gameFolderPath);
-                                res.terminate(400, `Results did not match for ${hash}`);
-                                return;
-                            }
-
-                            if (gameResult.PlayersCount !== 2) {
-                                await fs.remove(gameFolderPath);
-                                res.terminate(400, `Invalid players count for ${hash}`);
-                                return;
-                            }
-
-                            let game: Dal.Types.Game = {
-                                Hash: hash,
-                                Result: gameResult,
-                                PostedToDiscord: false
-                            };
-
-                            await Dal.Manipulation.GamesStore.add(game);
-
-                            let playersStats = await setPlayersStats(gameResult.Players[0], gameResult.Players[1]);
-
+                        if (result.status == Dal.Types.Status.Success) {
                             // send to queue
                             await Queuing.pushTo<Dal.Types.QueuedReplay>('incoming-games', {
-                                Hash: game.Hash,
-                                MapName: game.Result.MapName,
-                                Duration: game.Result.Duration,
-                                Players: playersStats,
-                                ModName: parsedResult.modName,
-                                ModVersion: gameResult.ModVersion
+                                Hash: result.hash,
+                                MapName: result.mapName,
+                                Duration: result.duration,
+                                Players: result.playersStats,
+                                ModName: result.modName,
+                                ModVersion: result.modVersion
                             });
 
                             await fs.remove(tempFolderPath);
 
                             res.terminate(200, "Added");
+                            return;
+
+                        } else {
+                            res.terminate(400, result.errorMessage);
                             return;
                         }
                     });
