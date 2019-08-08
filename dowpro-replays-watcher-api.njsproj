@@ -57,18 +57,6 @@
     <TypeScriptCompile Include="src\extends\response.extends.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\logic\file.system.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\logic\ladder.logic.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\logic\unzipping.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\logic\validation.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="src\middleware\extends.implementation.middleware.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -90,7 +78,6 @@
     <Folder Include="src\config\" />
     <Folder Include="src\middleware\" />
     <Folder Include="src\extends\" />
-    <Folder Include="src\logic\" />
     <Folder Include="src\routes\" />
   </ItemGroup>
   <ItemGroup>
