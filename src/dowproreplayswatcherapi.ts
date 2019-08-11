@@ -11,27 +11,13 @@ import { extendsImplementation } from './middleware/extends.implementation.middl
 
 import { apiConfig } from './config/api.config.interface';
 
-import { Configuration as MessageBrokerConfiguration, Queuing } from 'node-message-broker';
-import { Configuration as DalConfiguration, Types } from 'dowpro-replay-watcher-dal';
+import { Configuration as MessageBrokerConfiguration } from 'node-message-broker';
+import { Configuration as DalConfiguration } from 'dowpro-replay-watcher-dal';
 import { Configuration as RsaStoreConfiguration } from 'rsa-vault';
 
 MessageBrokerConfiguration.Setup(apiConfig());
 DalConfiguration.Setup(apiConfig());
 RsaStoreConfiguration.Setup(apiConfig());
-
-//import * as fs from 'fs-extra';
-//(async () => {
-//    console.log('dir', __dirname);
-//    console.log('cwd', process.cwd());
-//    let a;
-//    try {
-//        a = await fs.readFile('./../dowpro-replays/8e47a9977242ba38936836f6dbe8990b021d2a80274de13e779331b5151a21d3/result.json');
-//    } catch (err) {
-//        throw err;
-//    }
-//    console.log('a', a);
-//})();
-
 
 let app: Express = express();
 app.use(busboy());
@@ -58,38 +44,3 @@ app.set('port', 3001);
 var server = app.listen(app.get('port'), apiConfig().expressListeningIPAddress, function () {
     debug('Express server listening on port ' + server.address().port);
 });
-
-//(async () => {
-//    await Queuing.popFrom('incoming-games', (c: Types.Game) => console.log('c', c));
-
-    //await Queuing.pushTo('incoming-games', {
-    //    Hash: 'yolo',
-    //    Result: {
-    //        PlayersCount: 2,
-    //        WinCondition: 'Anihilate',
-    //        TeamsCount: 2,
-    //        Duration: 504,
-    //        MapName: 'Antiga bay',
-    //        Players: [
-    //            {
-    //                Race: 'ork',
-    //                IsHuman: true,
-    //                IsAmongWinners: false,
-    //                Team: 1,
-    //                Name: 'something',
-    //                PTtlSc: 5645
-    //            },
-    //            {
-    //                Race: 'sm',
-    //                IsHuman: true,
-    //                IsAmongWinners: true,
-    //                Team: 2,
-    //                Name: 'yao',
-    //                PTtlSc: 508
-    //            }
-    //        ]
-    //    },
-    //    Version: '3.66',
-    //    PostedToDiscord: false,
-    //});
-//})();
