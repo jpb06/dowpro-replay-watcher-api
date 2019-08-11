@@ -78,6 +78,7 @@ export function mapUploadRoutes(app: Express) {
                 res.terminate(400, 'Invalid request (nobusboy)');
             }
         } catch (error) {
+            console.log(error);
             return res.terminate(500, error);
         }
     });

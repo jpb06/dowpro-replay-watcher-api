@@ -25,7 +25,6 @@ export function mapSecurityRoutes(app: Express) {
             if (isPasswordValid) {
                 let applicationKeys: Types.ApplicationKeys = await VaultService.GetKeyPair('dowpro-ladder');
 
-                console.log('appkeys', applicationKeys);
                 let gracePeriod = req.body.expiresIn || 120;
                 let expirationDate = moment().add(gracePeriod, 'seconds');
 
@@ -34,7 +33,6 @@ export function mapSecurityRoutes(app: Express) {
                     expiresIn: gracePeriod
                 });
 
-                console.log('token', jwtBearerToken);
                 return res.status(200).json({
                     status: 200,
                     token: jwtBearerToken,
