@@ -45,7 +45,7 @@ export function mapUploadRoutes(app: Express) {
                     writeStream.on('finish', async () => {
                         console.log('Upload complete');
 
-                        var result = await Dal.Business.ReadGameResultArchive(tempFolder, tempFilePath, tempFolderPath, apiConfig().gamesFilesRepositoryPath);
+                        let result = await Dal.Business.ReadGameResultArchive(tempFolder, tempFilePath, tempFolderPath, apiConfig().gamesFilesRepositoryPath);
 
                         if (result.status == Dal.Types.Status.Success) {
                             // send to queue
