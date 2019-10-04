@@ -32,10 +32,10 @@
     "express": "^4.17.1",
     "fs-extra": "^8.1.0",
     "jsonwebtoken": "^8.5.1",
-    "node-message-broker": "0.0.7",
+    "node-message-broker": "^0.1.0",
     "node-unzipper": "0.0.3",
     "relic-chunky-parser": "0.0.7",
-    "rsa-vault": "0.0.9",
+    "rsa-vault": "^0.1.1",
     "uuid": "^3.3.3"
   }
 }
